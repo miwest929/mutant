@@ -42,7 +42,7 @@ module Mutant
 
     # Run driver
     #
-    # @param [Driver] driver
+    # @param [Async] driver
     #
     # @return [Object]
     #   the last returned status payload

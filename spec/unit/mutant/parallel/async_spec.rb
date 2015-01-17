@@ -1,4 +1,4 @@
-RSpec.describe Mutant::Parallel::Driver do
+RSpec.describe Mutant::Parallel::Async do
   let(:object) { described_class.new(binding) }
 
   let(:binding) { double('Binding') }

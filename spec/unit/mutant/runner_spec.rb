@@ -12,7 +12,7 @@ RSpec.describe Mutant::Runner do
   describe '.call' do
     let(:integration) { double('Integration')            }
     let(:reporter)    { double('Reporter', delay: delay) }
-    let(:driver)      { double('Driver')                 }
+    let(:async)       { double('Async')                  }
     let(:delay)       { double('Delay')                  }
     let(:env)         { FakeEnv                          }
     let(:env_result)  { double('Env Result')             }
@@ -46,7 +46,7 @@ RSpec.describe Mutant::Runner do
     before do
       expect(reporter).to receive(:start).with(env).ordered
       expect(integration).to receive(:setup).ordered
-      expect(Mutant::Parallel).to receive(:async).with(parallel_config).and_return(driver).ordered
+      expect(Mutant::Parallel).to receive(:async).with(parallel_config).and_return(async).ordered
     end
 
     subject { described_class.call(env) }
@@ -55,9 +55,9 @@ RSpec.describe Mutant::Runner do
       let(:status) { double('Status', done: true, payload: env_result) }
 
       before do
-        expect(driver).to receive(:status).and_return(status)
+        expect(async).to receive(:status).and_return(status)
         expect(reporter).to receive(:progress).with(status).ordered
-        expect(driver).to receive(:stop).ordered
+        expect(async).to receive(:stop).ordered
         expect(reporter).to receive(:report).with(env_result).ordered
       end
     end
@@ -67,13 +67,13 @@ RSpec.describe Mutant::Runner do
       let(:status_b) { double('Status B', done: true, payload: env_result) }
 
       before do
-        expect(driver).to receive(:status).and_return(status_a).ordered
+        expect(async).to receive(:status).and_return(status_a).ordered
         expect(reporter).to receive(:progress).with(status_a).ordered
         expect(Kernel).to receive(:sleep).with(reporter.delay).ordered
 
-        expect(driver).to receive(:status).and_return(status_b).ordered
+        expect(async).to receive(:status).and_return(status_b).ordered
         expect(reporter).to receive(:progress).with(status_b).ordered
-        expect(driver).to receive(:stop).ordered
+        expect(async).to receive(:stop).ordered
 
         expect(reporter).to receive(:report).with(env_result).ordered
       end

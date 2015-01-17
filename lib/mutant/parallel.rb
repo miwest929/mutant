@@ -2,8 +2,8 @@ module Mutant
   # Parallel excecution engine of arbitrary payloads
   module Parallel
 
-    # Driver for parallelized execution
-    class Driver
+    # Async for parallelized execution
+    class Async
       include Concord.new(:binding)
 
       # Return scheduler status
@@ -26,16 +26,16 @@ module Mutant
         binding.call(__method__)
         self
       end
-    end # Driver
+    end # Async
 
     # Run async computation returing driver
     #
-    # @return [Driver]
+    # @return [Async]
     #
     # @api private
     #
     def self.async(config)
-      Driver.new(config.env.new_mailbox.bind(Master.call(config)))
+      Async.new(config.env.new_mailbox.bind(Master.call(config)))
     end
 
     # Job result sink
